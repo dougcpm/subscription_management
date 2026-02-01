@@ -49,11 +49,20 @@
                         <i class="ri-dashboard-line"></i> <span data-key="t-dashboard">Dashboard</span>
                     </a>
                 </li>
+
+                <li class="menu-title"><span data-key="t-saas">SaaS</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{% url 'tenants:list' %}">
+                        <i class="ri-group-line"></i> <span data-key="t-tenants">Tenants</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{% url 'tenants:create' %}">
+                        <i class="ri-add-circle-line"></i> <span data-key="t-tenant-new">Novo Tenant</span>
+                    </a>
+                </li>
                 {% endif %}
 
-                <!-- =================================================================
-                MENU DO ADMINISTRADOR
-                ================================================================== -->
                 <li class="menu-title"><span data-key="t-menu">Administração</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" data-bs-target="#sidebarConfig" data-bs-toggle="collapse" role="button"

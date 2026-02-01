@@ -26,3 +26,6 @@ curl -fsSL https://railway.com/install.sh | sh
 railway link -p 0788ed9a-d7dd-4627-b4c0-489ae1d5ff7f
 railway login
 railway run "comando"
+
+- E‑mail: admin@example.com
+- Senha: admin123

@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.configuracao',
     'apps.notificacoes',
-    'apps.estoque',
     'pages',
 
 

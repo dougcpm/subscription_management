@@ -12,8 +12,7 @@ from pages.views import pages_starter
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Dashboard - Redirect to Estoque Dashboard
-    path('', login_required(lambda request: redirect('estoque:dashboard')), name='home'),
+    path('', login_required(pages_starter), name='home'),
     # Apps
     path('apps/',include('apps.urls')),
     # Layouts
@@ -50,12 +49,6 @@ urlpatterns = [
 
     # Email
     path('email/', include('apps.email_app.urls', namespace='email_app')),
-
-    # Estoque
-    path('estoque/', include('apps.estoque.urls', namespace='estoque')),
-
-    # Relatórios
-    path('relatorios/', include('apps.relatorios.urls', namespace='relatorios')),
 
 ]
 

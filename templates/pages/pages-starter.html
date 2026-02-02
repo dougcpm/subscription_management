@@ -8,9 +8,7 @@
     <div class="page-content">
         <div class="container-fluid">
 
-            {% block pagetitle %}
-            {% include "partials/page-title.html" with pagetitle="Principal" title="Início" %}
-            {% endblock pagetitle %}
+            {% block pagetitle %}{% endblock pagetitle %}
 
             <div class="row mb-4">
                 <div class="col-xl-8">
@@ -44,14 +42,9 @@
                                         Lista de clientes do SaaS
                                     </a>
                                 </li>
-                                <li class="mb-2">
+                                <li class="mb-0">
                                     <a href="{% url 'tenants:create' %}" class="link-secondary">
                                         Registrar novo cliente
-                                    </a>
-                                </li>
-                                <li class="mb-0">
-                                    <a href="{% url 'configuracao:configuracao_site' %}" class="link-secondary">
-                                        Configurações do sistema
                                     </a>
                                 </li>
                             </ul>

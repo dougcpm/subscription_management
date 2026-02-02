@@ -1,6 +1,6 @@
 {% extends "partials/base.html" %}
 {% load static %}
-{% block title %}Tenants do SaaS{% endblock title %}
+{% block title %}Clientes do SaaS{% endblock title %}
 
 {% block content %}
 <div class="main-content">
@@ -10,15 +10,15 @@
                 <div class="col-12">
                     <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                         <div class="flex-grow-1">
-                            <h4 class="fs-16 mb-1">Tenants do SaaS</h4>
-                            <p class="text-muted mb-0">Controle de clientes, assinaturas e pagamentos por tenant.</p>
+                            <h4 class="fs-16 mb-1">Clientes do SaaS</h4>
+                            <p class="text-muted mb-0">Controle de clientes, assinaturas e pagamentos por cliente.</p>
                         </div>
                         <div class="mt-3 mt-lg-0 d-flex gap-2">
                             <a href="{% url 'tenants:payments-list' %}" class="btn btn-soft-secondary">
                                 <i class="ri-bank-card-line align-middle me-1"></i> Pagamentos
                             </a>
                             <a href="{% url 'tenants:create' %}" class="btn btn-success">
-                                <i class="ri-add-circle-line align-middle me-1"></i> Novo Tenant
+                                <i class="ri-add-circle-line align-middle me-1"></i> Novo cliente
                             </a>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Lista de tenants</h5>
+                            <h5 class="card-title mb-0">Lista de clientes</h5>
                         </div>
                         <div class="card-body">
                             {% if tenants %}
@@ -111,7 +111,7 @@
                                 </table>
                             </div>
                             {% else %}
-                            <p class="text-muted mb-0">Nenhum tenant encontrado. Configure a API e crie o primeiro cliente.</p>
+                            <p class="text-muted mb-0">Nenhum cliente encontrado. Configure a API e crie o primeiro cliente.</p>
                             {% endif %}
                         </div>
                     </div>

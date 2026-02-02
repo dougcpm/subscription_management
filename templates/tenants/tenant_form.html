@@ -1,6 +1,6 @@
 {% extends "partials/base.html" %}
 {% load static %}
-{% block title %}{% if form.initial.schema_name %}Editar Tenant{% else %}Novo Tenant{% endif %}{% endblock title %}
+{% block title %}{% if form.initial.schema_name %}Editar cliente{% else %}Novo cliente{% endif %}{% endblock title %}
 
 {% block content %}
 <div class="main-content">
@@ -11,7 +11,7 @@
                     <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                         <div class="flex-grow-1">
                             <h4 class="fs-16 mb-1">
-                                {% if form.initial.schema_name %}Editar Tenant{% else %}Novo Tenant{% endif %}
+                                {% if form.initial.schema_name %}Editar cliente{% else %}Novo cliente{% endif %}
                             </h4>
                             <p class="text-muted mb-0">
                                 Defina os dados do cliente e o status da assinatura no SaaS.
@@ -43,7 +43,7 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Dados do tenant</h5>
+                            <h5 class="card-title mb-0">Dados do cliente</h5>
                         </div>
                         <div class="card-body">
                             <form method="post" novalidate>

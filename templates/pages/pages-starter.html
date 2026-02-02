@@ -18,17 +18,17 @@
                         <div class="card-body">
                             <h4 class="fs-16 mb-3">Bem-vindo ao painel de assinaturas</h4>
                             <p class="text-muted mb-4">
-                                Acompanhe e gerencie os tenants do SaaS, incluindo status de teste, pagamento
+                                Acompanhe e gerencie os clientes do SaaS, incluindo status de teste, pagamento
                                 e domínios configurados para cada cliente.
                             </p>
                             <div class="d-flex flex-wrap gap-2">
                                 <a href="{% url 'tenants:list' %}" class="btn btn-primary">
                                     <i class="ri-group-line align-middle me-1"></i>
-                                    Ver tenants
+                                    Ver clientes
                                 </a>
                                 <a href="{% url 'tenants:create' %}" class="btn btn-success">
                                     <i class="ri-add-circle-line align-middle me-1"></i>
-                                    Novo tenant
+                                    Novo cliente
                                 </a>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                             <ul class="list-unstyled mb-0">
                                 <li class="mb-2">
                                     <a href="{% url 'tenants:list' %}" class="link-secondary">
-                                        Lista de tenants do SaaS
+                                        Lista de clientes do SaaS
                                     </a>
                                 </li>
                                 <li class="mb-2">

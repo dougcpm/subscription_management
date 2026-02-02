@@ -57,6 +57,11 @@ class TenantPaymentForm(forms.ModelForm):
     schema_name = forms.ChoiceField(
         label="Cliente",
         required=False,
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            },
+        ),
     )
 
     class Meta:

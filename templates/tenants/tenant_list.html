@@ -52,6 +52,8 @@
                                             <th>Domínio principal</th>
                                             <th>Status</th>
                                             <th>Pago até</th>
+                                            <th>Licenças (M / S)</th>
+                                            <th>Storage (GB)</th>
                                             <th>Criado em</th>
                                             <th>Ações</th>
                                         </tr>
@@ -77,6 +79,13 @@
                                                 {% else %}
                                                     -
                                                 {% endif %}
+                                            </td>
+                                            <td>
+                                                {{ tenant.manager_licenses|default:"-" }} /
+                                                {{ tenant.staff_licenses|default:"-" }}
+                                            </td>
+                                            <td>
+                                                {{ tenant.storage_gb|default:"-" }}
                                             </td>
                                             <td>
                                                 {% if tenant.created_on %}

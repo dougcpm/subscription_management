@@ -37,12 +37,18 @@ class TenantCreateView(LoginRequiredMixin, FormView):
         client = SaasApiClient()
         data = form.cleaned_data
         paid_until = data.get("paid_until")
+        manager_licenses = data.get("manager_licenses")
+        staff_licenses = data.get("staff_licenses")
+        storage_gb = data.get("storage_gb")
         payload = {
             "schema_name": data.get("schema_name"),
             "client_name": data.get("client_name"),
             "on_trial": data.get("on_trial"),
             "paid_until": paid_until.isoformat() if paid_until else None,
             "domain": data.get("primary_domain"),
+            "manager_licenses": manager_licenses if manager_licenses is not None else 0,
+            "staff_licenses": staff_licenses if staff_licenses is not None else 0,
+            "storage_gb": storage_gb if storage_gb is not None else 0,
         }
         try:
             client.create_tenant(payload)
@@ -76,6 +82,9 @@ class TenantUpdateView(LoginRequiredMixin, FormView):
                 "primary_domain": tenant.get("primary_domain") or "",
                 "on_trial": tenant.get("on_trial") if tenant.get("on_trial") is not None else False,
                 "paid_until": tenant.get("paid_until") or None,
+                "manager_licenses": tenant.get("manager_licenses") if tenant.get("manager_licenses") is not None else 0,
+                "staff_licenses": tenant.get("staff_licenses") if tenant.get("staff_licenses") is not None else 0,
+                "storage_gb": tenant.get("storage_gb") if tenant.get("storage_gb") is not None else 0,
             }
         )
         return initial
@@ -85,11 +94,17 @@ class TenantUpdateView(LoginRequiredMixin, FormView):
         schema_name = self.kwargs.get("schema_name")
         data = form.cleaned_data
         paid_until = data.get("paid_until")
+        manager_licenses = data.get("manager_licenses")
+        staff_licenses = data.get("staff_licenses")
+        storage_gb = data.get("storage_gb")
         payload = {
             "client_name": data.get("client_name"),
             "on_trial": data.get("on_trial"),
             "paid_until": paid_until.isoformat() if paid_until else None,
             "domain": data.get("primary_domain"),
+            "manager_licenses": manager_licenses if manager_licenses is not None else 0,
+            "staff_licenses": staff_licenses if staff_licenses is not None else 0,
+            "storage_gb": storage_gb if storage_gb is not None else 0,
         }
         try:
             client.update_tenant(schema_name, payload)

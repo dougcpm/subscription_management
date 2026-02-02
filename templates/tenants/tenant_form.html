@@ -119,6 +119,48 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="{{ form.manager_licenses.id_for_label }}" class="form-label">
+                                                Licenças Manager
+                                            </label>
+                                            {{ form.manager_licenses }}
+                                            {% if form.manager_licenses.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.manager_licenses.errors.0 }}
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="{{ form.staff_licenses.id_for_label }}" class="form-label">
+                                                Licenças Staff
+                                            </label>
+                                            {{ form.staff_licenses }}
+                                            {% if form.staff_licenses.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.staff_licenses.errors.0 }}
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="{{ form.storage_gb.id_for_label }}" class="form-label">
+                                                Storage (GB)
+                                            </label>
+                                            {{ form.storage_gb }}
+                                            {% if form.storage_gb.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.storage_gb.errors.0 }}
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="d-flex gap-2">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="ri-save-line align-middle me-1"></i>
@@ -144,6 +186,10 @@
                             </p>
                             <p class="text-muted mb-2">
                                 O campo "Pago até" será usado para controlar o vencimento da assinatura.
+                            </p>
+                            <p class="text-muted mb-2">
+                                Os limites de licenças e storage determinam quantos usuários e quanto espaço o tenant
+                                pode utilizar no SaaS.
                             </p>
                             <p class="text-muted mb-0">
                                 Quando "Em período de teste" estiver ativo e "Pago até" vazio, o tenant será tratado como trial.

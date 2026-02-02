@@ -17,6 +17,24 @@ class TenantForm(forms.Form):
         max_length=255,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
+    manager_licenses = forms.IntegerField(
+        label="Licenças Manager",
+        required=False,
+        min_value=0,
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
+    )
+    staff_licenses = forms.IntegerField(
+        label="Licenças Staff",
+        required=False,
+        min_value=0,
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
+    )
+    storage_gb = forms.IntegerField(
+        label="Storage (GB)",
+        required=False,
+        min_value=0,
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
+    )
     on_trial = forms.BooleanField(
         label="Em período de teste",
         required=False,

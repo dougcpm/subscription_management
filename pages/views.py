@@ -141,12 +141,11 @@ def lock_screen(request):
 def unlock_screen(request):
     """Exibe a tela de bloqueio e processa o desbloqueio."""
     if not request.session.get('is_locked'):
-        return redirect('home') # Redireciona para o dashboard se não estiver bloqueado
+        return redirect('home')
 
     if request.method == 'POST':
         password = request.POST.get('password')
         if request.user.check_password(password):
-            # Senha correta, desbloqueia a sessão
             del request.session['is_locked']
             return redirect('home')
         else:

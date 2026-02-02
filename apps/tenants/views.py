@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import FormView
 
 from .forms import TenantForm, TenantPaymentForm
+from .models import TenantPayment
 from .services import SaasApiClient, SaasApiError
 
 
@@ -120,38 +121,84 @@ class TenantPaymentUpdateView(LoginRequiredMixin, FormView):
     form_class = TenantPaymentForm
 
     def get_success_url(self):
-        return reverse("tenants:list")
+        return reverse("tenants:payment", kwargs={"schema_name": self.kwargs.get("schema_name")})
 
-    def get_initial(self):
-        initial = super().get_initial()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        schema_name = self.kwargs.get("schema_name")
+        client = SaasApiClient()
+        tenant = None
+        try:
+            tenant = client.retrieve_tenant(schema_name)
+        except SaasApiError as exc:
+            messages.error(self.request, str(exc))
+        context.update(
+            {
+                "schema_name": schema_name,
+                "tenant": tenant,
+                "payments": TenantPayment.objects.filter(schema_name=schema_name),
+            }
+        )
+        return context
+
+    def form_valid(self, form):
         schema_name = self.kwargs.get("schema_name")
         client = SaasApiClient()
         try:
             tenant = client.retrieve_tenant(schema_name)
         except SaasApiError as exc:
             messages.error(self.request, str(exc))
-            return initial
-        initial.update(
-            {
-                "paid_until": tenant.get("paid_until") or None,
-                "on_trial": tenant.get("on_trial") if tenant.get("on_trial") is not None else False,
-            }
-        )
-        return initial
+            tenant = None
+        client_name = ""
+        if isinstance(tenant, dict):
+            client_name = tenant.get("client_name") or ""
+        payment = form.save(commit=False)
+        payment.schema_name = schema_name
+        if not payment.client_name:
+            payment.client_name = client_name
+        payment.save()
+        messages.success(self.request, "Pagamento registrado com sucesso.")
+        return redirect(self.get_success_url())
 
-    def form_valid(self, form):
-        client = SaasApiClient()
-        schema_name = self.kwargs.get("schema_name")
-        data = form.cleaned_data
-        paid_until = data.get("paid_until")
-        payload = {
-            "paid_until": paid_until.isoformat() if paid_until else None,
-            "on_trial": data.get("on_trial"),
+
+class TenantPaymentListView(LoginRequiredMixin, View):
+    template_name = "tenants/payment_list.html"
+
+    def get(self, request):
+        payment_id = request.GET.get("id")
+        editing_payment = None
+        if payment_id:
+            editing_payment = get_object_or_404(TenantPayment, pk=payment_id)
+            form = TenantPaymentForm(instance=editing_payment)
+        else:
+            form = TenantPaymentForm()
+        payments = TenantPayment.objects.all()
+        context = {
+            "form": form,
+            "payments": payments,
+            "editing_payment": editing_payment,
         }
-        try:
-            client.update_tenant(schema_name, payload)
-            messages.success(self.request, "Pagamento registrado com sucesso na API.")
-            return redirect(self.get_success_url())
-        except SaasApiError as exc:
-            messages.error(self.request, str(exc))
-            return self.form_invalid(form)
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        payment_id = request.POST.get("id")
+        editing_payment = None
+        if payment_id:
+            editing_payment = get_object_or_404(TenantPayment, pk=payment_id)
+            form = TenantPaymentForm(request.POST, request.FILES, instance=editing_payment)
+        else:
+            form = TenantPaymentForm(request.POST, request.FILES)
+        if form.is_valid():
+            payment = form.save()
+            if payment_id:
+                messages.success(request, "Pagamento atualizado com sucesso.")
+            else:
+                messages.success(request, "Pagamento criado com sucesso.")
+            return redirect("tenants:payments-list")
+        payments = TenantPayment.objects.all()
+        context = {
+            "form": form,
+            "payments": payments,
+            "editing_payment": editing_payment,
+        }
+        return render(request, self.template_name, context)

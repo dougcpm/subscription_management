@@ -1,5 +1,7 @@
 from django import forms
 
+from .models import TenantPayment
+
 
 class TenantForm(forms.Form):
     schema_name = forms.CharField(
@@ -49,16 +51,57 @@ class TenantForm(forms.Form):
     )
 
 
-class TenantPaymentForm(forms.Form):
-    paid_until = forms.DateField(
-        label="Pago até",
-        required=True,
-        widget=forms.DateInput(
-            attrs={"class": "form-control", "type": "date"},
-        ),
-    )
-    on_trial = forms.BooleanField(
-        label="Em período de teste",
-        required=False,
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
-    )
+class TenantPaymentForm(forms.ModelForm):
+    class Meta:
+        model = TenantPayment
+        fields = [
+            "amount",
+            "currency",
+            "status",
+            "payment_date",
+            "reference",
+            "notes",
+            "invoice_file",
+        ]
+        widgets = {
+            "amount": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "step": "0.01",
+                    "min": "0",
+                },
+            ),
+            "currency": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "maxlength": "10",
+                },
+            ),
+            "status": forms.Select(
+                attrs={
+                    "class": "form-select",
+                },
+            ),
+            "payment_date": forms.DateInput(
+                attrs={
+                    "class": "form-control",
+                    "type": "date",
+                },
+            ),
+            "reference": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                },
+            ),
+            "notes": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3,
+                },
+            ),
+            "invoice_file": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control",
+                },
+            ),
+        }

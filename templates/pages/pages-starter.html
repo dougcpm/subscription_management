@@ -1,30 +1,69 @@
 {% extends "partials/base.html" %}
 {% load static %}
-{% block title %}Starter Page{% endblock title %}
+{% block title %}Início{% endblock title %}
 {% block extra_css %}
 {% endblock extra_css %}
 {% block content %}
-            <!-- ============================================================== -->
-            <!-- Start right Content here -->
-            <!-- ============================================================== -->
-            <div class="main-content">
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
 
-                <div class="page-content">
-                    <div class="container-fluid">
+            {% block pagetitle %}
+            {% include "partials/page-title.html" with pagetitle="Principal" title="Início" %}
+            {% endblock pagetitle %}
 
-                        {% block pagetitle %}
-                        {% include "partials/page-title.html" with pagetitle="Pages" title="Starter" %}
-                        {% endblock pagetitle %}
-    
-                        
+            <div class="row mb-4">
+                <div class="col-xl-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="fs-16 mb-3">Bem-vindo ao painel de assinaturas</h4>
+                            <p class="text-muted mb-4">
+                                Acompanhe e gerencie os tenants do SaaS, incluindo status de teste, pagamento
+                                e domínios configurados para cada cliente.
+                            </p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="{% url 'tenants:list' %}" class="btn btn-primary">
+                                    <i class="ri-group-line align-middle me-1"></i>
+                                    Ver tenants
+                                </a>
+                                <a href="{% url 'tenants:create' %}" class="btn btn-success">
+                                    <i class="ri-add-circle-line align-middle me-1"></i>
+                                    Novo tenant
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <!-- container-fluid -->
                 </div>
-                <!-- End Page-content -->
-
-            {% block footer %}
-            {% include "partials/footer.html" %}
-            {% endblock footer %}
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="fs-15 mb-3">Atalhos rápidos</h5>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <a href="{% url 'tenants:list' %}" class="link-secondary">
+                                        Lista de tenants do SaaS
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{% url 'tenants:create' %}" class="link-secondary">
+                                        Registrar novo cliente
+                                    </a>
+                                </li>
+                                <li class="mb-0">
+                                    <a href="{% url 'configuracao:home' %}" class="link-secondary">
+                                        Configurações do sistema
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- end main content-->
+
+        </div>
+    </div>
+    {% block footer %}
+    {% include "partials/footer.html" %}
+    {% endblock footer %}
+</div>
 {% endblock content %}

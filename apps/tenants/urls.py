@@ -25,5 +25,4 @@ urlpatterns = [
     path("pagamentos/<int:pk>/excluir/", TenantPaymentDeleteView.as_view(), name="payments-delete"),
     path("<str:schema_name>/", TenantDetailView.as_view(), name="detail"),
     path("<str:schema_name>/editar/", TenantUpdateView.as_view(), name="update"),
-    path("<str:schema_name>/pagamento/", TenantPaymentUpdateView.as_view(), name="payment"),
 ]

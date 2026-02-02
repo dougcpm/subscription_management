@@ -12,6 +12,7 @@ from pages.views import pages_starter
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", login_required(pages_starter), name="home"),
+    path("dashboard", login_required(pages_starter), name="dashboard"),
     path("apps/", include("apps.urls")),
     path("layouts/", include("layouts.urls")),
     path("components/", include("components.urls")),

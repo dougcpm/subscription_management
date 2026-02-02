@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic.edit import FormView
 
-from .forms import TenantForm
+from .forms import TenantForm, TenantPaymentForm
 from .services import SaasApiClient, SaasApiError
 
 
@@ -109,6 +109,48 @@ class TenantUpdateView(LoginRequiredMixin, FormView):
         try:
             client.update_tenant(schema_name, payload)
             messages.success(self.request, "Tenant atualizado com sucesso na API.")
+            return redirect(self.get_success_url())
+        except SaasApiError as exc:
+            messages.error(self.request, str(exc))
+            return self.form_invalid(form)
+
+
+class TenantPaymentUpdateView(LoginRequiredMixin, FormView):
+    template_name = "tenants/tenant_payment_form.html"
+    form_class = TenantPaymentForm
+
+    def get_success_url(self):
+        return reverse("tenants:list")
+
+    def get_initial(self):
+        initial = super().get_initial()
+        schema_name = self.kwargs.get("schema_name")
+        client = SaasApiClient()
+        try:
+            tenant = client.retrieve_tenant(schema_name)
+        except SaasApiError as exc:
+            messages.error(self.request, str(exc))
+            return initial
+        initial.update(
+            {
+                "paid_until": tenant.get("paid_until") or None,
+                "on_trial": tenant.get("on_trial") if tenant.get("on_trial") is not None else False,
+            }
+        )
+        return initial
+
+    def form_valid(self, form):
+        client = SaasApiClient()
+        schema_name = self.kwargs.get("schema_name")
+        data = form.cleaned_data
+        paid_until = data.get("paid_until")
+        payload = {
+            "paid_until": paid_until.isoformat() if paid_until else None,
+            "on_trial": data.get("on_trial"),
+        }
+        try:
+            client.update_tenant(schema_name, payload)
+            messages.success(self.request, "Pagamento registrado com sucesso na API.")
             return redirect(self.get_success_url())
         except SaasApiError as exc:
             messages.error(self.request, str(exc))

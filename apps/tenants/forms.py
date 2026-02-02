@@ -47,3 +47,18 @@ class TenantForm(forms.Form):
             attrs={"class": "form-control", "type": "date"},
         ),
     )
+
+
+class TenantPaymentForm(forms.Form):
+    paid_until = forms.DateField(
+        label="Pago até",
+        required=True,
+        widget=forms.DateInput(
+            attrs={"class": "form-control", "type": "date"},
+        ),
+    )
+    on_trial = forms.BooleanField(
+        label="Em período de teste",
+        required=False,
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    )

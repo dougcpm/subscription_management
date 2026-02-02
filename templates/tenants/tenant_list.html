@@ -94,9 +94,12 @@
                                                     -
                                                 {% endif %}
                                             </td>
-                                            <td>
+                                            <td class="d-flex gap-1">
                                                 <a href="{% url 'tenants:update' tenant.schema_name %}" class="btn btn-sm btn-soft-primary">
                                                     <i class="ri-edit-line align-middle"></i>
+                                                </a>
+                                                <a href="{% url 'tenants:payment' tenant.schema_name %}" class="btn btn-sm btn-soft-success">
+                                                    <i class="ri-bank-card-line align-middle"></i>
                                                 </a>
                                             </td>
                                         </tr>

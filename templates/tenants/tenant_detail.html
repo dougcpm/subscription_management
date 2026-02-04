@@ -52,7 +52,7 @@
                         <div class="card-body">
                             {% if tenant %}
                             <dl class="row mb-0">
-                                <dt class="col-sm-5">Schema</dt>
+                                <dt class="col-sm-5">Identificador</dt>
                                 <dd class="col-sm-7">{{ tenant.schema_name }}</dd>
 
                                 <dt class="col-sm-5">Nome</dt>
@@ -64,7 +64,7 @@
                                 <dt class="col-sm-5">Pago até</dt>
                                 <dd class="col-sm-7">
                                     {% if tenant.paid_until %}
-                                        {{ tenant.paid_until }}
+                                        {{ tenant.paid_until|date:"d/m/Y" }}
                                     {% else %}
                                         -
                                     {% endif %}
@@ -117,7 +117,7 @@
                                     <tbody>
                                         {% for payment in payments %}
                                         <tr>
-                                            <td>{{ payment.payment_date }}</td>
+                                            <td>{{ payment.payment_date|date:"d/m/Y" }}</td>
                                             <td>{{ payment.amount }} {{ payment.currency }}</td>
                                             <td>{{ payment.get_status_display }}</td>
                                             <td>{{ payment.reference|default:"-" }}</td>

@@ -1,6 +1,6 @@
 {% extends "partials/base.html" %}
 {% load static %}
-{% block title %}Pagamentos de tenants{% endblock title %}
+{% block title %}Pagamentos de clientes{% endblock title %}
 
 {% block content %}
 <div class="main-content">
@@ -101,7 +101,7 @@
                                     <thead class="text-muted table-light">
                                         <tr>
                                             <th>Data</th>
-                                            <th>Tenant</th>
+                                            <th>Identificador</th>
                                             <th>Cliente</th>
                                             <th>Valor</th>
                                             <th>Status</th>
@@ -113,7 +113,7 @@
                                     <tbody>
                                         {% for payment in payments %}
                                         <tr>
-                                            <td>{{ payment.payment_date }}</td>
+                                            <td>{{ payment.payment_date|date:"d/m/Y" }}</td>
                                             <td>{{ payment.schema_name }}</td>
                                             <td>{{ payment.client_name|default:"-" }}</td>
                                             <td>{{ payment.amount }} {{ payment.currency }}</td>

@@ -167,7 +167,7 @@
                                     <tbody>
                                         {% for payment in payments %}
                                         <tr>
-                                            <td>{{ payment.payment_date }}</td>
+                                            <td>{{ payment.payment_date|date:"d/m/Y" }}</td>
                                             <td>{{ payment.amount }} {{ payment.currency }}</td>
                                             <td>{{ payment.get_status_display }}</td>
                                             <td>{{ payment.reference|default:"-" }}</td>

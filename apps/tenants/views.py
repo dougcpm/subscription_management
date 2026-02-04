@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
@@ -23,6 +25,14 @@ class TenantListView(LoginRequiredMixin, View):
         except SaasApiError as exc:
             error_message = str(exc)
             messages.error(request, error_message)
+        for tenant in tenants:
+            for key in ("paid_until", "created_on"):
+                value = tenant.get(key)
+                if isinstance(value, str):
+                    try:
+                        tenant[key] = date.fromisoformat(value)
+                    except ValueError:
+                        continue
         context = {
             "tenants": tenants,
             "error_message": error_message,
@@ -132,6 +142,14 @@ class TenantUpdateView(LoginRequiredMixin, FormView):
     def get_success_url(self):
         return reverse("tenants:list")
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        field = form.fields.get("schema_name")
+        if field is not None:
+            attrs = field.widget.attrs
+            attrs["readonly"] = True
+        return form
+
     def get_initial(self):
         initial = super().get_initial()
         schema_name = self.kwargs.get("schema_name")
@@ -191,6 +209,14 @@ class TenantDetailView(LoginRequiredMixin, View):
             tenant = client.retrieve_tenant(schema_name)
         except SaasApiError as exc:
             messages.error(request, str(exc))
+        if isinstance(tenant, dict):
+            for key in ("paid_until", "created_on"):
+                value = tenant.get(key)
+                if isinstance(value, str):
+                    try:
+                        tenant[key] = date.fromisoformat(value)
+                    except ValueError:
+                        continue
         payments = TenantPayment.objects.filter(schema_name=schema_name)
         context = {
             "schema_name": schema_name,

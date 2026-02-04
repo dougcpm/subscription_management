@@ -50,7 +50,7 @@
                                 <table class="table table-hover table-centered align-middle table-nowrap mb-0">
                                     <thead class="text-muted table-light">
                                         <tr>
-                                            <th>Schema</th>
+                                            <th>Identificador</th>
                                             <th>Cliente</th>
                                             <th>Domínio principal</th>
                                             <th>Status</th>
@@ -78,7 +78,7 @@
                                             </td>
                                             <td>
                                                 {% if tenant.paid_until %}
-                                                    {{ tenant.paid_until }}
+                                                    {{ tenant.paid_until|date:"d/m/Y" }}
                                                 {% else %}
                                                     -
                                                 {% endif %}
@@ -100,7 +100,7 @@
                                             </td>
                                             <td>
                                                 {% if tenant.created_on %}
-                                                    {{ tenant.created_on }}
+                                                    {{ tenant.created_on|date:"d/m/Y" }}
                                                 {% else %}
                                                     -
                                                 {% endif %}

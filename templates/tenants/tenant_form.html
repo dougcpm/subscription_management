@@ -1,6 +1,6 @@
 {% extends "partials/base.html" %}
 {% load static %}
-{% block title %}{% if form.initial.schema_name %}Editar cliente{% else %}Novo cliente{% endif %}{% endblock title %}
+{% block title %}{% if form.initial.schema_name %}Editar cliente{% else %}Novo cliente{% endif %} | Clientes SaaS{% endblock title %}
 
 {% block content %}
 <div class="main-content">
@@ -98,25 +98,15 @@
                                             <label for="{{ form.password.id_for_label }}" class="form-label">
                                                 Senha do super usuário
                                             </label>
-                                            {{ form.password }}
+                                            <div class="input-group">
+                                                {{ form.password }}
+                                                <button class="btn btn-outline-secondary" type="button" id="generate-password-btn">
+                                                    Gerar senha
+                                                </button>
+                                            </div>
                                             {% if form.password.errors %}
                                             <div class="invalid-feedback d-block">
                                                 {{ form.password.errors.0 }}
-                                            </div>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 d-flex align-items-center">
-                                        <div class="form-check form-switch">
-                                            {{ form.generate_password }}
-                                            <label class="form-check-label" for="{{ form.generate_password.id_for_label }}">
-                                                Gerar senha automaticamente
-                                            </label>
-                                            {% if form.generate_password.errors %}
-                                            <div class="invalid-feedback d-block">
-                                                {{ form.generate_password.errors.0 }}
                                             </div>
                                             {% endif %}
                                         </div>
@@ -184,7 +174,11 @@
                                             <label for="{{ form.manager_licenses.id_for_label }}" class="form-label">
                                                 Licenças Manager
                                             </label>
-                                            {{ form.manager_licenses }}
+                                            <div class="input-group">
+                                                <button class="btn btn-outline-secondary decrement-btn" type="button" data-target-id="{{ form.manager_licenses.id_for_label }}">-</button>
+                                                {{ form.manager_licenses }}
+                                                <button class="btn btn-outline-secondary increment-btn" type="button" data-target-id="{{ form.manager_licenses.id_for_label }}">+</button>
+                                            </div>
                                             {% if form.manager_licenses.errors %}
                                             <div class="invalid-feedback d-block">
                                                 {{ form.manager_licenses.errors.0 }}
@@ -197,7 +191,11 @@
                                             <label for="{{ form.staff_licenses.id_for_label }}" class="form-label">
                                                 Licenças Staff
                                             </label>
-                                            {{ form.staff_licenses }}
+                                            <div class="input-group">
+                                                <button class="btn btn-outline-secondary decrement-btn" type="button" data-target-id="{{ form.staff_licenses.id_for_label }}">-</button>
+                                                {{ form.staff_licenses }}
+                                                <button class="btn btn-outline-secondary increment-btn" type="button" data-target-id="{{ form.staff_licenses.id_for_label }}">+</button>
+                                            </div>
                                             {% if form.staff_licenses.errors %}
                                             <div class="invalid-feedback d-block">
                                                 {{ form.staff_licenses.errors.0 }}
@@ -210,7 +208,11 @@
                                             <label for="{{ form.storage_gb.id_for_label }}" class="form-label">
                                                 Storage (GB)
                                             </label>
-                                            {{ form.storage_gb }}
+                                            <div class="input-group">
+                                                <button class="btn btn-outline-secondary decrement-btn" type="button" data-target-id="{{ form.storage_gb.id_for_label }}" data-step="100">-</button>
+                                                {{ form.storage_gb }}
+                                                <button class="btn btn-outline-secondary increment-btn" type="button" data-target-id="{{ form.storage_gb.id_for_label }}" data-step="100">+</button>
+                                            </div>
                                             {% if form.storage_gb.errors %}
                                             <div class="invalid-feedback d-block">
                                                 {{ form.storage_gb.errors.0 }}
@@ -239,3 +241,89 @@
     {% include "partials/footer.html" %}
 </div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        var form = document.querySelector("form");
+        if (!form) {
+            return;
+        }
+
+        var monthlyInput = document.getElementById("{{ form.monthly_price.id_for_label }}");
+        if (monthlyInput) {
+            monthlyInput.addEventListener("blur", function () {
+                var value = monthlyInput.value.replace(",", ".");
+                if (value === "") {
+                    return;
+                }
+                var number = parseFloat(value);
+                if (!isNaN(number)) {
+                    monthlyInput.value = number.toFixed(2);
+                }
+            });
+        }
+
+        var passwordInput = document.getElementById("{{ form.password.id_for_label }}");
+
+        function generatePassword() {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var length = 12;
+            var result = "";
+            for (var i = 0; i < length; i++) {
+                var index = Math.floor(Math.random() * chars.length);
+                result += chars.charAt(index);
+            }
+            return result;
+        }
+
+        var generatePasswordButton = document.getElementById("generate-password-btn");
+        if (generatePasswordButton && passwordInput) {
+            generatePasswordButton.addEventListener("click", function () {
+                passwordInput.value = generatePassword();
+            });
+        }
+
+        var decrementButtons = document.querySelectorAll(".decrement-btn");
+        var incrementButtons = document.querySelectorAll(".increment-btn");
+
+        function updateNumberInput(targetId, delta) {
+            var input = document.getElementById(targetId);
+            if (!input) {
+                return;
+            }
+            var value = parseInt(input.value || "0", 10);
+            if (isNaN(value)) {
+                value = 0;
+            }
+            value = value + delta;
+            if (value < 0) {
+                value = 0;
+            }
+            input.value = value;
+        }
+
+        decrementButtons.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                var targetId = btn.getAttribute("data-target-id");
+                var step = parseInt(btn.getAttribute("data-step") || "1", 10);
+                if (isNaN(step) || step <= 0) {
+                    step = 1;
+                }
+                updateNumberInput(targetId, -step);
+            });
+        });
+
+        incrementButtons.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                var targetId = btn.getAttribute("data-target-id");
+                var step = parseInt(btn.getAttribute("data-step") || "1", 10);
+                if (isNaN(step) || step <= 0) {
+                    step = 1;
+                }
+                updateNumberInput(targetId, step);
+            });
+        });
+    })();
+</script>
+{% endblock extra_js %}

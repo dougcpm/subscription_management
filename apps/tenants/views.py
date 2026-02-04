@@ -123,9 +123,11 @@ class TenantCreateView(LoginRequiredMixin, FormView):
         password = data.get("password") or ""
         generate_password = data.get("generate_password")
 
-        if generate_password:
+        if generate_password and not password:
             alphabet = string.ascii_letters + string.digits
             password = "".join(secrets.choice(alphabet) for _ in range(12))
+            form.data = form.data.copy()
+            form.data["password"] = password
         elif not password:
             form.add_error(
                 "password",

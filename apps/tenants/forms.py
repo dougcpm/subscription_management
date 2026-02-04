@@ -23,7 +23,7 @@ class TenantForm(forms.Form):
     password = forms.CharField(
         label="Senha do super usuário",
         required=False,
-        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     primary_domain = forms.CharField(
         label="Domínio principal",

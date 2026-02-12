@@ -17,13 +17,16 @@ RUN apt-get update && apt-get install -y \
     libcairo2 \
     libpango-1.0-0 \
     libpangocairo-1.0-0 \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+
+RUN npm install && npx gulp build
 
 ENV DJANGO_SETTINGS_MODULE=velzon.settings.production \
     PORT=8000
